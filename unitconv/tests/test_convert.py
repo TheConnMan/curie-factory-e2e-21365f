@@ -5,28 +5,28 @@ from unitconv.convert import UnknownUnit, convert
 
 class ConvertTests(unittest.TestCase):
     def test_celsius_to_fahrenheit(self):
-        self.assertAlmostEqual(convert(100, "c", "f"), 212.0)
+        self.assertAlmostEqual(convert(100, "c", "f"), 212.0, places=6)
 
     def test_fahrenheit_to_celsius(self):
-        self.assertAlmostEqual(convert(32, "f", "c"), 0.0)
+        self.assertAlmostEqual(convert(32, "f", "c"), 0.0, places=6)
 
     def test_km_to_mi(self):
-        self.assertAlmostEqual(convert(5, "km", "mi"), 3.10686, places=4)
+        self.assertAlmostEqual(convert(5, "km", "mi"), 3.106856, places=6)
 
     def test_celsius_to_rankine(self):
-        self.assertAlmostEqual(convert(100, "c", "r"), 671.67)
+        self.assertAlmostEqual(convert(100, "c", "r"), 671.67, places=6)
 
     def test_rankine_to_celsius(self):
-        self.assertAlmostEqual(convert(671.67, "r", "c"), 100.0)
+        self.assertAlmostEqual(convert(671.67, "r", "c"), 100.0, places=6)
 
     def test_fahrenheit_to_rankine(self):
-        self.assertAlmostEqual(convert(32, "f", "r"), 491.67)
+        self.assertAlmostEqual(convert(32, "f", "r"), 491.67, places=6)
 
     def test_rankine_to_fahrenheit(self):
-        self.assertAlmostEqual(convert(491.67, "r", "f"), 32.0)
+        self.assertAlmostEqual(convert(491.67, "r", "f"), 32.0, places=6)
 
     def test_rankine_identity(self):
-        self.assertAlmostEqual(convert(300.0, "r", "r"), 300.0)
+        self.assertAlmostEqual(convert(300.0, "r", "r"), 300.0, places=6)
 
     def test_unknown_unit(self):
         with self.assertRaises(UnknownUnit):
