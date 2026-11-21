@@ -26,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    print(f"{result:.4g}")
+    print(f"{result:.2f}")
     return 0
 
 
