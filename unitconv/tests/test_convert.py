@@ -21,6 +21,30 @@ class ConvertTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             convert(1, "c", "m")
 
+    def test_rounding_mode_half_up(self):
+        self.assertEqual(convert(2.5, "m", "m", rounded=True, digits=0), 3.0)
+        self.assertEqual(convert(-2.5, "m", "m", rounded=True, digits=0), -3.0)
+
+    def test_rounded_default_precision(self):
+        self.assertEqual(convert(5, "km", "mi", rounded=True), 3.11)
+        self.assertEqual(convert(36.6, "c", "f", rounded=True), 97.88)
+
+    def test_rounded_explicit_precision(self):
+        self.assertEqual(convert(5, "km", "mi", rounded=True, digits=4), 3.1069)
+
+    def test_rounded_decimal_midpoint(self):
+        self.assertEqual(convert(2.675, "m", "m", rounded=True), 2.68)
+
+    def test_rounded_extreme_magnitude(self):
+        self.assertEqual(convert(1e30, "m", "m", rounded=True), 1e30)
+        self.assertEqual(
+            convert(1, "km", "mi", rounded=True, digits=300), 0.62137119223733397
+        )
+
+    def test_no_rounding_by_default(self):
+        self.assertEqual(convert(5, "km", "mi"), 3.1068559611866697)
+        self.assertEqual(convert(2.5, "m", "m"), 2.5)
+
 
 if __name__ == "__main__":
     unittest.main()
