@@ -9,7 +9,7 @@ LENGTH_TO_METERS = {
     "ft": 0.3048,
 }
 
-TEMPERATURE = {"c", "f"}
+TEMPERATURE = {"c", "f", "r"}
 
 
 class UnknownUnit(ValueError):
@@ -35,9 +35,21 @@ def convert(value: float, src: str, dst: str) -> float:
     raise ValueError(f"cannot convert {src} to {dst}")
 
 
+_TO_CELSIUS = {
+    "c": lambda value: value,
+    "f": lambda value: (value - 32) * 5 / 9,
+    "r": lambda value: (value - 491.67) * 5 / 9,
+}
+
+_FROM_CELSIUS = {
+    "c": lambda value: value,
+    "f": lambda value: value * 9 / 5 + 32,
+    "r": lambda value: (value + 273.15) * 9 / 5,
+}
+
+
 def _convert_temperature(value: float, src: str, dst: str) -> float:
     if src == dst:
         return value
-    if src == "c":
-        return value * 9 / 5 + 32
-    return (value - 32) * 5 / 9
+    celsius = _TO_CELSIUS[src](value)
+    return _FROM_CELSIUS[dst](celsius)
