@@ -11,16 +11,33 @@ LENGTH_TO_METERS = {
 
 TEMPERATURE = {"c", "f"}
 
+DEFAULT_PRECISION = 2
+
 
 class UnknownUnit(ValueError):
     """Raised when a unit is not in the table."""
 
 
-def convert(value: float, src: str, dst: str) -> float:
+def convert(value: float, src: str, dst: str, *, rounding: int | bool | None = None) -> float:
     """Convert ``value`` from unit ``src`` to unit ``dst``.
 
     Temperature and length units cannot be mixed.
+
+    Pass ``rounding`` to get a rounded result instead of the raw float:
+    ``True`` rounds to ``DEFAULT_PRECISION`` decimal places, an ``int``
+    rounds to that many places, ``None`` or ``False`` (the default)
+    returns the unrounded result. Rounding follows Python's built-in
+    ``round`` (half to even) and applies to every conversion family,
+    identity conversions included.
     """
+    result = _raw_convert(value, src, dst)
+    if rounding is None or rounding is False:
+        return result
+    digits = DEFAULT_PRECISION if rounding is True else rounding
+    return round(result, digits)
+
+
+def _raw_convert(value: float, src: str, dst: str) -> float:
     src = src.lower()
     dst = dst.lower()
     if src in TEMPERATURE and dst in TEMPERATURE:
