@@ -10,6 +10,26 @@ class ConvertTests(unittest.TestCase):
     def test_fahrenheit_to_celsius(self):
         self.assertAlmostEqual(convert(32, "f", "c"), 0.0)
 
+    def test_celsius_to_rankine(self):
+        self.assertAlmostEqual(convert(100, "c", "r"), 671.67)
+
+    def test_rankine_to_celsius(self):
+        self.assertAlmostEqual(convert(671.67, "r", "c"), 100.0)
+
+    def test_fahrenheit_to_rankine(self):
+        self.assertAlmostEqual(convert(32, "f", "r"), 491.67)
+
+    def test_rankine_to_fahrenheit(self):
+        self.assertAlmostEqual(convert(491.67, "r", "f"), 32.0)
+
+    def test_rankine_identity(self):
+        self.assertEqual(convert(123.45, "r", "r"), 123.45)
+
+    def test_fahrenheit_rankine_extreme_values_stay_finite(self):
+        # Direct +/- 459.67 must stay finite where a scale pivot would overflow.
+        self.assertEqual(convert(1e308, "f", "r"), 1e308 + 459.67)
+        self.assertEqual(convert(1e308, "r", "f"), 1e308 - 459.67)
+
     def test_km_to_mi(self):
         self.assertAlmostEqual(convert(5, "km", "mi"), 3.10686, places=4)
 
