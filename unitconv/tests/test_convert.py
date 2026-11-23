@@ -39,6 +39,27 @@ class ConvertTests(unittest.TestCase):
     def test_rankine_identity(self):
         self.assertAlmostEqual(convert(45.6, "r", "r"), 45.6, places=6)
 
+    def test_celsius_to_newton(self):
+        self.assertEqual(convert(23.8, "c", "n"), 7.854)
+
+    def test_newton_to_celsius(self):
+        self.assertEqual(convert(7.854, "n", "c"), 23.8)
+
+    def test_newton_identity(self):
+        self.assertEqual(convert(23.8, "n", "n"), 23.8)
+
+    def test_fahrenheit_to_newton(self):
+        self.assertEqual(convert(212.0, "f", "n"), 33.0)
+
+    def test_newton_to_fahrenheit(self):
+        self.assertEqual(convert(33.0, "n", "f"), 212.0)
+
+    def test_rankine_to_newton(self):
+        self.assertEqual(convert(671.67, "r", "n"), 33.0)
+
+    def test_newton_to_rankine(self):
+        self.assertEqual(convert(33.0, "n", "r"), 671.67)
+
     def test_cli_prints_two_decimal_places(self):
         captured = io.StringIO()
         with redirect_stdout(captured):
