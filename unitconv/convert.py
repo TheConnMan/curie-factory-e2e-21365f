@@ -9,7 +9,7 @@ LENGTH_TO_METERS = {
     "ft": 0.3048,
 }
 
-TEMPERATURE = {"c", "f", "r"}
+TEMPERATURE = {"c", "f", "r", "de"}
 
 
 class UnknownUnit(ValueError):
@@ -48,4 +48,18 @@ def _convert_temperature(value: float, src: str, dst: str) -> float:
         return value * 5 / 9 - 273.15
     if src == "f" and dst == "r":
         return value + 459.67
-    return value - 459.67
+    if src == "r" and dst == "f":
+        return value - 459.67
+    if src == "c" and dst == "de":
+        return (100 - value) * 3 / 2
+    if src == "de" and dst == "c":
+        return 100 - value * 2 / 3
+    if src == "f" and dst == "de":
+        return (100 - (value - 32) * 5 / 9) * 3 / 2
+    if src == "de" and dst == "f":
+        return (100 - value * 2 / 3) * 9 / 5 + 32
+    if src == "r" and dst == "de":
+        return (100 - (value * 5 / 9 - 273.15)) * 3 / 2
+    if src == "de" and dst == "r":
+        return (100 - value * 2 / 3 + 273.15) * 9 / 5
+    raise ValueError(f"unsupported temperature pair {src} to {dst}")

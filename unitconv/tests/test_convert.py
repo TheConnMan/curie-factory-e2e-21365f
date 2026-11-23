@@ -39,6 +39,35 @@ class ConvertTests(unittest.TestCase):
     def test_rankine_identity(self):
         self.assertAlmostEqual(convert(45.6, "r", "r"), 45.6, places=6)
 
+    def test_celsius_to_delisle(self):
+        self.assertAlmostEqual(convert(38.6, "c", "de"), 92.1, places=6)
+
+    def test_delisle_to_celsius(self):
+        self.assertAlmostEqual(convert(92.1, "de", "c"), 38.6, places=6)
+
+    def test_delisle_identity(self):
+        self.assertAlmostEqual(convert(45.6, "de", "de"), 45.6, places=6)
+
+    def test_delisle_celsius_round_trip(self):
+        delisle = convert(38.6, "c", "de")
+        self.assertAlmostEqual(delisle, 92.1, places=6)
+        self.assertAlmostEqual(convert(delisle, "de", "c"), 38.6, places=6)
+
+    def test_fahrenheit_delisle(self):
+        self.assertAlmostEqual(convert(32, "f", "de"), 150.0, places=6)
+        self.assertAlmostEqual(convert(150.0, "de", "f"), 32.0, places=6)
+
+    def test_rankine_delisle(self):
+        self.assertAlmostEqual(convert(491.67, "r", "de"), 150.0, places=6)
+        self.assertAlmostEqual(convert(150.0, "de", "r"), 491.67, places=6)
+
+    def test_cli_prints_delisle_two_decimals(self):
+        captured = io.StringIO()
+        with redirect_stdout(captured):
+            code = main(["38.6", "c", "de"])
+        self.assertEqual(code, 0)
+        self.assertEqual(captured.getvalue(), "92.10\n")
+
     def test_cli_prints_two_decimal_places(self):
         captured = io.StringIO()
         with redirect_stdout(captured):
